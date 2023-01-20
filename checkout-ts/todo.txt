@@ -1,0 +1,18 @@
+-   StockItemService
+-   Each load should hit stock items with potentially new prices, show upserting works in tests
+    +   upsert amount by SKU
+    +   upsert discount by SKU and count
+
+-   BasketService
+-   Adding x amount of stock items to basket updates total amount 
+    +   without discounts
+    +   With discounts on multiples of prices e.g. %<number that applies discount> from highest values
+    +   If I add more of an item already in the basket, it increments the price and totals of stockItem, the specific entry can be removed though
+    
+-   Component
+-   Calls both services, and UI calls different services
+    +   Add item
+    +   remove items
+    +   Remove all
+    +   Get discounts
+    +   Confirm purchase, which allows for upserting of prices
