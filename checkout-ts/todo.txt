@@ -16,3 +16,4 @@
     +   Remove all
     +   Get discounts
     +   Confirm purchase, which allows for upserting of prices
+    +   favicon logos on UI

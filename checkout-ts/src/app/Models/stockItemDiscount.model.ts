@@ -1,4 +1,4 @@
 export class StockItemDiscount{
-    count!: number;
+    count: number = 0;
     discountedPrice!: number;
 }

@@ -26,8 +26,8 @@ describe('AppComponent', () => {
 
     stockService = TestBed.inject(StockService);
     
-    stockService.addItemToStock('a',.5);
-    stockService.addItemToStock('b',.3);
+    stockService.upsertStockItem('a',.5);
+    stockService.upsertStockItem('b',.3);
 
   });
 
