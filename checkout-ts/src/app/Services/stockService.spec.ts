@@ -21,7 +21,6 @@ describe('StockService', () => {
         stockService.upsertStockItem('c',.2);
         stockService.upsertStockItem('d',.15);
         
-        // Adding to basket as separate service?
     });
 
     it('should be created', inject([StockService], () => {
@@ -62,4 +61,11 @@ describe('StockService', () => {
         expect(stockService.getItemFromSKU('a').discounts.find(discountItem => discountItem.count == 3)?.discountedPrice).toEqual(1.1);
         expect(stockService.getItemFromSKU('a').discounts.length).toEqual(1);
     }));
+
+    it('get largest discount for stockItem', inject([StockService], () => {
+        stockService.upsertDiscountToStockItem('a',100,23);
+        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),1000).discountedPrice).toEqual(23);
+        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),100).discountedPrice).toEqual(1.3);
+        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),2).count).toBe(0);
+    }))
 });

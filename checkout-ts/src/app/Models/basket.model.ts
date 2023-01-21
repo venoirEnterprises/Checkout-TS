@@ -1,7 +1,7 @@
 import { StockItem } from "./stockItem.model";
 
 export class BasketItem {
-    checkoutItem!: StockItem;
+    SKU!: string;
     count!: number;
 }
 
