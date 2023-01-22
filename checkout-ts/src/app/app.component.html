@@ -1,1 +1,37 @@
-Total: {{basketForDisplay.total}}
+
+
+<div class="jumbotron text-center">
+  <h1>Checkout</h1>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 sectionDisplay">
+      <div *ngFor="let stockItem of stockItems">
+        <h3 class="text-center">{{stockItem.SKU}}</h3>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10 text-center">
+              <p>Priced at £{{stockItem.standardPrice}}</p>
+              <p *ngFor="let discount of stockItem.discounts">
+                <i>Or {{discount.count}} for {{discount.discountedPrice}}</i>
+              </p>
+            </div>
+            <button class="col-md-2" (click)="addToBasket(stockItem.SKU)">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 sectionDisplay">
+      <h3 class="text-center">
+        Total: £{{basketForDisplay.total}}
+        <button *ngIf="basketForDisplay.total>0" (click)="emptyBasket()">clear</button>
+      </h3>
+      
+      <div *ngFor="let basketItem of basketForDisplay.basketItemsForDisplay; let i = index">
+        <h3>{{basketItem.count}} {{basketItem.SKU}}(s)</h3>
+        <button (click)="removeFromBasket(i)">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>

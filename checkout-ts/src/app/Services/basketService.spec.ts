@@ -44,9 +44,10 @@ describe('BasketService', () => {
 
         basketService.emptyBasket();
         expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
     }));
 
-    it('total of basket two SKUs, one discounted', inject([BasketService], () => {
+    it('total of basket SKU a discounted', inject([BasketService], () => {
         expect(basketService.getTotalPriceForBasket()).toEqual(0);
         
         basketService.addStockItemToBasket('a',1);
@@ -58,5 +59,54 @@ describe('BasketService', () => {
 
         basketService.emptyBasket();
         expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
     }));
+
+    it('total of basket SKU b discounted', inject([BasketService], () => {
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        
+        basketService.addStockItemToBasket('b',1);
+        basketService.addStockItemToBasket('a',1);
+        basketService.addStockItemToBasket('b',1);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(.95);
+        // discount of 1.3 for 3 + price of 0.5 * 2
+
+        basketService.emptyBasket();
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
+    }));
+
+    it('two discounts applied in the correct order', inject([BasketService], () => {
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        stockService.upsertDiscountToStockItem('a',7,2.5);
+        
+        basketService.addStockItemToBasket('a',6);
+        basketService.addStockItemToBasket('b',1);
+        basketService.addStockItemToBasket('a',4);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(4.1);
+        // discount of 1.3 for 3 + price of 0.5 * 2
+
+        basketService.emptyBasket();
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
+    }));
+
+    it('one discounts applied multiple times', inject([BasketService], () => {
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        
+        basketService.addStockItemToBasket('a',6);
+        basketService.addStockItemToBasket('b',1);
+        basketService.addStockItemToBasket('a',4);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(4.7);
+        // discount of 1.3 for 3 + price of 0.5 * 2
+
+        basketService.emptyBasket();
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
+    }));
+
+    
 });

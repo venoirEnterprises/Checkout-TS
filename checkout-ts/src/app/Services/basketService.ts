@@ -23,31 +23,32 @@ export class BasketService {
         }
     }
 
+    removeStockItemFromBasket(index:number) {
+        this.basket.basketItemsForDisplay.splice(index,1);        
+        this.basket.total = this.getTotalPriceForBasket();
+    }
+
     getBasketForDisplay(): Basket {
         return this.basket;
     }
 
     getTotalPriceForBasket() {
-        window.console.clear(); 
         let totalPrice = 0;
         this.stockService.getAllItems().forEach(stockItem =>{
             let remainingStockItemCountBySKU = this.basket.basketItemsForDisplay.filter(item => item.SKU == stockItem.SKU).map(o => o.count).reduce((partialSum, a) => partialSum + a, 0);// 5
 
             let highestCurrentDiscountForStockItemCount = this.stockService.getLargestDiscountItemByCount(stockItem, remainingStockItemCountBySKU);
             
-            while(remainingStockItemCountBySKU > highestCurrentDiscountForStockItemCount.count && highestCurrentDiscountForStockItemCount.discountedPrice != 0) {
+            while(remainingStockItemCountBySKU >= highestCurrentDiscountForStockItemCount.count && highestCurrentDiscountForStockItemCount.discountedPrice != 0) {
 
                 totalPrice += highestCurrentDiscountForStockItemCount.discountedPrice;
-                
-                window.console.log("1",stockItem.SKU, highestCurrentDiscountForStockItemCount.discountedPrice, totalPrice, remainingStockItemCountBySKU)
-                
-                remainingStockItemCountBySKU = remainingStockItemCountBySKU % highestCurrentDiscountForStockItemCount.count;
+                                
+                remainingStockItemCountBySKU = remainingStockItemCountBySKU - highestCurrentDiscountForStockItemCount.count;
 
                 highestCurrentDiscountForStockItemCount = this.stockService.getLargestDiscountItemByCount(stockItem, remainingStockItemCountBySKU);
             }
 
             totalPrice += remainingStockItemCountBySKU * stockItem.standardPrice;
-            window.console.log("2",stockItem.SKU, stockItem.standardPrice, totalPrice, remainingStockItemCountBySKU)
         });
 
         return parseFloat(totalPrice.toFixed(2));

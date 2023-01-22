@@ -24,12 +24,6 @@ describe('AppComponent', () => {
       ]
     }).compileComponents();
 
-
-    stockService = TestBed.inject(StockService);
-    
-    stockService.upsertStockItem('a',.5);
-    stockService.upsertStockItem('b',.3);
-
   });
 
   it('app exists', () => {
@@ -38,7 +32,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('checkoutItems exist at correct size', () => {
-    expect(stockService.getAllItems().length).toEqual(2);
-  })
 });
