@@ -65,7 +65,8 @@ describe('StockService', () => {
     it('get largest discount for stockItem', inject([StockService], () => {
         stockService.upsertDiscountToStockItem('a',100,23);
         expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),1000).discountedPrice).toEqual(23);
-        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),100).discountedPrice).toEqual(1.3);
-        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),2).count).toBe(0);
+        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),100).discountedPrice).toEqual(23);
+        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('a'),2).discountedPrice).toBe(0);
+        expect(stockService.getLargestDiscountItemByCount(stockService.getItemFromSKU('b'),1).discountedPrice).toBe(0);
     }))
 });

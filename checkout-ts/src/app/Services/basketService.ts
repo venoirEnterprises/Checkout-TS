@@ -18,19 +18,39 @@ export class BasketService {
             let basketItem = new BasketItem();
             basketItem.SKU = SKU;
             basketItem.count = count;
-            this.basket.items.push(basketItem);
+            this.basket.basketItemsForDisplay.push(basketItem);
+            this.basket.total = this.getTotalPriceForBasket();
         }
     }
 
-    getTotalForBasket() {
-        let total = 0;
-        this.basket.items.forEach(basketItem => { // Loading price dynamically from checkoutService
-            // Group together checkoutItems, then get prices with discounts if they apply
-            // Keeping separate checkout items, so they could remove the second group of a if they wanted
-            total += this.stockService.getItemFromSKU(basketItem.SKU).standardPrice * basketItem.count            
+    getBasketForDisplay(): Basket {
+        return this.basket;
+    }
+
+    getTotalPriceForBasket() {
+        window.console.clear(); 
+        let totalPrice = 0;
+        this.stockService.getAllItems().forEach(stockItem =>{
+            let remainingStockItemCountBySKU = this.basket.basketItemsForDisplay.filter(item => item.SKU == stockItem.SKU).map(o => o.count).reduce((partialSum, a) => partialSum + a, 0);// 5
+
+            let highestCurrentDiscountForStockItemCount = this.stockService.getLargestDiscountItemByCount(stockItem, remainingStockItemCountBySKU);
+            
+            while(remainingStockItemCountBySKU > highestCurrentDiscountForStockItemCount.count && highestCurrentDiscountForStockItemCount.discountedPrice != 0) {
+
+                totalPrice += highestCurrentDiscountForStockItemCount.discountedPrice;
+                
+                window.console.log("1",stockItem.SKU, highestCurrentDiscountForStockItemCount.discountedPrice, totalPrice, remainingStockItemCountBySKU)
+                
+                remainingStockItemCountBySKU = remainingStockItemCountBySKU % highestCurrentDiscountForStockItemCount.count;
+
+                highestCurrentDiscountForStockItemCount = this.stockService.getLargestDiscountItemByCount(stockItem, remainingStockItemCountBySKU);
+            }
+
+            totalPrice += remainingStockItemCountBySKU * stockItem.standardPrice;
+            window.console.log("2",stockItem.SKU, stockItem.standardPrice, totalPrice, remainingStockItemCountBySKU)
         });
 
-        return total;
+        return parseFloat(totalPrice.toFixed(2));
     }
 
     emptyBasket() {

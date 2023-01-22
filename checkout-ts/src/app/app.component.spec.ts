@@ -19,7 +19,8 @@ describe('AppComponent', () => {
       ],
       providers:[
         AppComponent,
-      { provide: StockService, useClass: StockService }
+      { provide: StockService, useClass: StockService,},
+      { provide: BasketService, useClass: BasketService }
       ]
     }).compileComponents();
 

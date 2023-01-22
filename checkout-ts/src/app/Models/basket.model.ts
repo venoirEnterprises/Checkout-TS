@@ -6,5 +6,6 @@ export class BasketItem {
 }
 
 export class Basket {
-    items: BasketItem[] = [];
+    basketItemsForDisplay: BasketItem[] = [];
+    total: number = 0;
 }

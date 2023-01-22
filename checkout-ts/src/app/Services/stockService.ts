@@ -46,8 +46,8 @@ export class StockService {
     }
 
     getLargestDiscountItemByCount(stockItem: StockItem, currentMax: number) {
-        let largestDiscount = this.getDiscountPriceFromStockItemByCount(stockItem,Math.max(...stockItem.discounts.map(o => o.count).filter(item => item < currentMax)))
+        let largestDiscount = this.getDiscountPriceFromStockItemByCount(stockItem,Math.max(...stockItem.discounts.map(o => o.count).filter(item => item <= currentMax)))
         
-        return largestDiscount;
+        return largestDiscount  ;
     }
 }

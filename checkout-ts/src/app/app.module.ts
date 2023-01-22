@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BasketService } from './Services/basketService';
 import { StockService } from './Services/stockService';
 
 @NgModule({
@@ -13,7 +14,10 @@ import { StockService } from './Services/stockService';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [StockService],
+  providers: [
+    StockService,
+    BasketService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
