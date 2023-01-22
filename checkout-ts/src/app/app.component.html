@@ -29,8 +29,19 @@
       </h3>
       
       <div *ngFor="let basketItem of basketForDisplay.basketItemsForDisplay; let i = index">
-        <h3>{{basketItem.count}} {{basketItem.SKU}}(s)</h3>
-        <button (click)="removeFromBasket(i)">Remove</button>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="row">
+              <button class="col-md-2" *ngIf="basketItem.count == 1" (click)="removeFromBasket(i)">0</button>
+              <button class="col-md-2" *ngIf="basketItem.count > 1" (click)="updateAmountForBasketItem(i,basketItem.count - 1)">-</button>
+              <h3 class="col-md-8 text-center">{{basketItem.count}} {{basketItem.SKU}}(s)</h3>
+              <button class="col-md-2" (click)="updateAmountForBasketItem(i,basketItem.count + 1)">+</button>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <button (click)="removeFromBasket(i)">Remove</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

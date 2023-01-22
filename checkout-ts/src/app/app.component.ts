@@ -27,9 +27,6 @@ export class AppComponent implements OnInit {
 
     this.stockService.upsertStockItem('a',.5);
     this.stockService.upsertDiscountToStockItem('a',3,1.3);
-    this.stockService.upsertDiscountToStockItem('a',3,1.3);
-    this.stockService.upsertDiscountToStockItem('a',3,1.3);
-    this.stockService.upsertDiscountToStockItem('a',3,1.3);
     this.stockService.upsertStockItem('b',.3);
     this.stockService.upsertDiscountToStockItem('b',2,.45);
     this.stockService.upsertStockItem('c',.2);
@@ -45,6 +42,12 @@ export class AppComponent implements OnInit {
 
   addToBasket(SKU: string) {
     this.basketService.addStockItemToBasket(SKU, 1);
+  }
+
+  updateAmountForBasketItem(index:number, newAmount: number) {
+    this.basketService.updateAmountForBasketItem(index,newAmount);
+    this.basketService.getTotalPriceForBasket();
+    this.getBasket();
   }
 
   removeFromBasket(index:number) {

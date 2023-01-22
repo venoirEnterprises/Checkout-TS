@@ -28,6 +28,14 @@ export class BasketService {
         this.basket.total = this.getTotalPriceForBasket();
     }
 
+    updateAmountForBasketItem(index:number,newAmount:number) {        
+        const basketItems = this.basket.basketItemsForDisplay
+        if(basketItems.length - 1 >= index) {
+            basketItems[index].count = newAmount;
+        }
+        this.basket.total = this.getTotalPriceForBasket();
+    }
+
     getBasketForDisplay(): Basket {
         return this.basket;
     }

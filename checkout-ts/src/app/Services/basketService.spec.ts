@@ -108,5 +108,54 @@ describe('BasketService', () => {
         expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
     }));
 
+    it('one discounts applied multiple times via modified basket items', inject([BasketService], () => {
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        
+        basketService.addStockItemToBasket('a',1);
+        basketService.addStockItemToBasket('b',1);
+        basketService.addStockItemToBasket('a',1);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(1.3);
+
+        basketService.updateAmountForBasketItem(0,3);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(2.1);
+
+        basketService.updateAmountForBasketItem(2,3);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(2.9);
+
+        basketService.emptyBasket();
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(0);
+    }));
+
+    it('add basket item with discount, modifying non-existent one, no error', inject([BasketService], () => {
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        
+        basketService.addStockItemToBasket('a',3);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(1);
+        expect(basketService.getTotalPriceForBasket()).toEqual(1.3);
+
+        basketService.updateAmountForBasketItem(1000,12);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(1);
+        expect(basketService.getTotalPriceForBasket()).toEqual(1.3);
+    }));
+
+    it('remove non-existent basketItem does nothing', inject([BasketService], () => {
+        expect(basketService.getTotalPriceForBasket()).toEqual(0);
+        
+        basketService.addStockItemToBasket('a',1);
+        basketService.addStockItemToBasket('b',1);
+        basketService.addStockItemToBasket('a',1);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(1.3);
+    
+
+        basketService.removeStockItemFromBasket(11);
+        expect(basketService.getBasketForDisplay().basketItemsForDisplay.length).toEqual(3);
+        expect(basketService.getTotalPriceForBasket()).toEqual(1.3);
+    
+    }));
     
 });
